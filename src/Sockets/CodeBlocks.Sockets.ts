@@ -1,9 +1,8 @@
-import { Server } from "socket.io";
-import { server } from "../app";
+// import { io } from "../app";
 
-const io = new Server(server, {
-	cors: {
-		origin: "http://localhost:3000",
-		methods: ["GET", "POST"],
-	},
-});
+// io.on("Connection", (socket) => {
+// 	console.log(`user Connected: ${socket}`);
+// 	socket.on("send_code", (data) => {
+// 		console.log(data);
+// 	});
+// });
