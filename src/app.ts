@@ -28,16 +28,14 @@ app.use(
 		origin: "*",
 	})
 );
-io.on("connection", (socket: any) => {
-	console.log(socket.id);
 
+io.on("connection", (socket: any) => {
 	socket.on("join_room", (data: ICodeBlock) => {
 		socket.join(data._id);
 		console.log("User Joined Room: " + data._id);
 	});
 
 	socket.on("send_message", (data: ICodeBlock) => {
-		console.log(data);
 		socket.to(data._id).emit("receive_message", data.code);
 	});
 
