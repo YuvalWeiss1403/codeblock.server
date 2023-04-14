@@ -1,6 +1,6 @@
 import mongoose, { ObjectId, Schema } from "mongoose";
 export interface ICodeBlock {
-	_id: ObjectId;
+	_id?: ObjectId;
 	title: string;
 	code: string;
 	usersConnected: number;

@@ -13,14 +13,21 @@ const port = process.env.PORT;
 const app = express();
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
-app.use(cors());
 
 const server = app.listen(port, () =>
 	console.log(`Listening on http://localhost:${port}`)
 );
 
-const io = socket(server);
-
+const io = socket(server, {
+	cors: {
+		origin: "*",
+	},
+});
+app.use(
+	cors({
+		origin: "*",
+	})
+);
 io.on("connection", (socket: any) => {
 	console.log(socket.id);
 
