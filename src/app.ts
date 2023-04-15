@@ -33,12 +33,9 @@ app.use(
 io.on("connection", (socket: any) => {
 	socket.on("join_room", (data: ICodeBlock) => {
 		socket.join(data._id);
-		console.log("User Joined Room: " + data._id);
-		socket.broadcast.to(data._id).emit("codeBlock", data.code);
 	});
 
 	socket.on("codeBlock", (_id: string, code: string) => {
-		console.log("user changed code" + code);
 		socket.broadcast.to(_id).emit("codeBlock", code);
 	});
 
