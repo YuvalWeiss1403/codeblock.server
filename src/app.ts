@@ -5,6 +5,7 @@ import cors from "cors";
 import { connectToDB } from "./connection";
 import dotenv from "dotenv";
 import { ICodeBlock } from "./Models/CodeBlocks.Models";
+
 const socket = require("socket.io");
 
 dotenv.config();
@@ -33,10 +34,12 @@ io.on("connection", (socket: any) => {
 	socket.on("join_room", (data: ICodeBlock) => {
 		socket.join(data._id);
 		console.log("User Joined Room: " + data._id);
+		socket.broadcast.to(data._id).emit("codeBlock", data.code);
 	});
 
-	socket.on("send_message", (data: ICodeBlock) => {
-		socket.to(data._id).emit("receive_message", data.code);
+	socket.on("codeBlock", (_id: string, code: string) => {
+		console.log("user changed code" + code);
+		socket.broadcast.to(_id).emit("codeBlock", code);
 	});
 
 	socket.on("disconnect", () => {

@@ -1,5 +1,5 @@
 import { ObjectId } from "mongoose";
-import { CodeBlockModel, ICodeBlock } from "../Models/CodeBlocks.Models";
+import { CodeBlockModel } from "../Models/CodeBlocks.Models";
 
 export const getAllCodeBlocks = async () => {
 	try {
