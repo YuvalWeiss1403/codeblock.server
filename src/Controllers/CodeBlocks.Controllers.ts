@@ -15,7 +15,7 @@ export const getAllCodeblocks = async (req: Request, res: Response) => {
 
 export const updateBlock = async (req: Request, res: Response) => {
 	try {
-		const codeblock = await updateCodeBlock(req.body._id, req.body.data);
+		const codeblock = await updateCodeBlock(req.body._id, req.body.newCode);
 		res.status(201).json(codeblock);
 	} catch (err) {
 		throw err;

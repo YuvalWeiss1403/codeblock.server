@@ -10,17 +10,19 @@ export const getAllCodeBlocks = async () => {
 	}
 };
 
-export const updateCodeBlock = async (_id: ObjectId, codeblock: ICodeBlock) => {
+export const updateCodeBlock = async (_id: ObjectId, newCode: string) => {
 	try {
-		const updateCodeblock = await CodeBlockModel.findByIdAndUpdate(
-			_id,
-			codeblock,
-			{
-				new: true,
+		const codeBlock = await CodeBlockModel.findById(_id);
+		if (codeBlock) {
+			codeBlock.code = newCode;
+			const updateCodeBlock = await CodeBlockModel.findByIdAndUpdate(
+				_id,
+				codeBlock,
+				{ new: true }
+			);
+			if (updateCodeBlock) {
+				return updateCodeBlock;
 			}
-		);
-		if (updateCodeblock) {
-			return updateCodeblock;
 		}
 	} catch (err) {
 		throw err;
