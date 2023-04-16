@@ -4,7 +4,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import { connectToDB } from "./connection";
 import dotenv from "dotenv";
-import { ICodeBlock } from "./Models/CodeBlocks.Models";
+import { CodeBlockModel, ICodeBlock } from "./Models/CodeBlocks.Models";
 
 const socket = require("socket.io");
 
@@ -31,15 +31,27 @@ app.use(
 );
 
 io.on("connection", (socket: any) => {
-	socket.on("join_room", (data: ICodeBlock) => {
-		socket.join(data._id);
+	socket.on("join_room", async (data: ICodeBlock) => {
+		if ((data.usersConnected = 0)) {
+			socket.join(data._id);
+			const updateUser: ICodeBlock = data;
+			updateUser.usersConnected = 1;
+			await CodeBlockModel.findOneAndUpdate(data._id, updateUser);
+			socket.broadcast.to(data._id).emit("users_connected");
+		}
 	});
 
 	socket.on("codeBlock", (_id: string, code: string) => {
 		socket.broadcast.to(_id).emit("codeBlock", code);
 	});
+	socket.on("users_connected", (_id: string) => {});
 
-	socket.on("disconnect", () => {
+	socket.on("disconnect", async (data: ICodeBlock) => {
+		const updateUser = data;
+		if (updateUser && updateUser.usersConnected > 0) {
+			updateUser.usersConnected--;
+			await CodeBlockModel.findOneAndUpdate(data._id, updateUser);
+		}
 		console.log("USER DISCONNECTED");
 	});
 });
